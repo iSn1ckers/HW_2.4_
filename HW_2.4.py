@@ -5,11 +5,6 @@ import chardet
 migration = 'Migrations'
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-def all_files_list():
-    migration_dir = os.path.join(current_dir, migration)
-    files_list = os.listdir(path=migration_dir)
-    return files_list
-
 
 def decode_file(file_name):
     with open(os.path.join(current_dir, migration, file_name), 'rb') as file:
@@ -20,15 +15,16 @@ def decode_file(file_name):
     return data
 
 
-def sql_files(files_list):
+def sql_files():
     sql_files_list = []
-    for file_name in files_list:
-        if file_name.endswith('.sql'):
-            sql_files_list.append(file_name)
+    for d, dirs, files in os.walk(current_dir):
+        for filename in files:
+            if filename.endswith('.sql'):
+                sql_files_list.append(filename)
     return sql_files_list
 
 
-def search_string(sql_files):
+def search_string(sql_files_list):
     file_list = sql_files_list
     while True:
         search = input('Введите строку, которая содержится в файлах: ')
@@ -43,4 +39,6 @@ def search_string(sql_files):
 
 
 if __name__ == '__main__':
-    search_string(sql_files(all_files_list()))
+    search_string(sql_files())
+
+    pass
